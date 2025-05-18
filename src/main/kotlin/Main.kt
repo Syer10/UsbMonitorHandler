@@ -82,7 +82,7 @@ class Main : SuspendingCliktCommand() {
                         }
                     )?.cancel()
                 }
-                println("UsbDevice connected! ${usbDevice.product} ${usbDevice.manufacturer} ${usbDevice.serialNumber}")
+                println("UsbDevice connected! ${usbDevice.product} - ${usbDevice.manufacturer} - ${usbDevice.serialNumber}")
             }
             .collect()
     }
@@ -99,8 +99,5 @@ class Main : SuspendingCliktCommand() {
         }
     }
 }
-
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 
 suspend fun main(args: Array<String>) = Main().main(args)

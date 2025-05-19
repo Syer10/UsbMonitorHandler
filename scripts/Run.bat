@@ -46,7 +46,7 @@ echo    Secondary Monitor ID: %SECONDARY_MONITOR_ID%
 echo    Multi Monitor Tool: %MULTI_MONITOR_TOOL%
 echo.
 
-java -jar UsbMonitorHandler.jar --usb-serial %USB_SERIAL% --main-monitor-id %MAIN_MONITOR_ID% --secondary-monitor-id %SECONDARY_MONITOR_ID% --multi-monitor-tool %MULTI_MONITOR_TOOL%
+".\jre\bin\java.exe" --enable-native-access=ALL-UNNAMED -jar UsbMonitorHandler.jar --usb-serial %USB_SERIAL% --main-monitor-id %MAIN_MONITOR_ID% --secondary-monitor-id %SECONDARY_MONITOR_ID% --multi-monitor-tool %MULTI_MONITOR_TOOL%
 
 echo.
 echo Process completed. Press any key to exit.

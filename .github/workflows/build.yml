@@ -1,0 +1,61 @@
+name: CI build
+
+on:
+  push:
+    tags:
+      - "v*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check_wrapper:
+    name: Validate Gradle Wrapper
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v4
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v3
+
+  build:
+    name: Build Jar
+    needs: check_wrapper
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master branch
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 24
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Jar
+        working-directory: master
+        run: ./gradlew :fatjar
+
+      - name: Get tag name
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Build Package
+        run: |
+          mkdir ./output
+          mv ./build/libs/UsbMonitorHandler-*.jar ./output/UsbMonitorHandler.jar
+          jlink --add-modules java.base --output ./output/jre --strip-debug --no-man-pages --no-header-files
+          cp ./scripts/Run.bat ./output/Run.bat
+          cd ./output
+          zip -r UsbMonitorHandler-${TAG_NAME}.zip ./
+          mv UsbMonitorHandler-${TAG_NAME}.zip ../
+          cd ..
+
+      - name: Upload Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: UsbMonitorHandler-${TAG_NAME}.zip

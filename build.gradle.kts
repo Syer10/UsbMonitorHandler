@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "ca.gosyer.usbhandler"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -21,8 +21,26 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-tasks.test {
-    useJUnitPlatform()
+tasks {
+    test {
+        useJUnitPlatform()
+    }
+
+    register<Jar>("fatJar") {
+        group = "build"
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        manifest {
+            attributes["Main-Class"] = "ca.gosyer.usbhandler.MainKt"
+        }
+
+        from(sourceSets.main.get().output)
+
+        dependsOn(configurations.runtimeClasspath)
+        from({
+            configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+        })
+    }
 }
 
 kotlin {

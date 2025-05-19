@@ -20,9 +20,29 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/actions/wrapper-validation@v3
 
+  jlink:
+    name: Create JRE
+    runs-on: windows-latest
+
+    steps:
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 24
+          distribution: 'temurin'
+
+      - name: Package JDK
+        run: jlink --add-modules java.base --output jre --strip-debug --no-man-pages --no-header-files
+
+      - name: Upload JDK package
+        uses: actions/upload-artifact@v4
+        with:
+          name: jre
+          path: jre
+
   build:
     name: Build Jar
-    needs: check_wrapper
+    needs: [check_wrapper, jlink]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -37,6 +57,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Download JRE
+        uses: actions/download-artifact@v4
+        with:
+          name: jre
+          path: jre
+
       - name: Build Jar
         run: ./gradlew :fatjar
 
@@ -47,7 +73,7 @@ jobs:
         run: |
           mkdir ./output
           mv ./build/libs/UsbMonitorHandler-*.jar ./output/UsbMonitorHandler.jar
-          jlink --add-modules java.base --output ./output/jre --strip-debug --no-man-pages --no-header-files
+          mv ./jre ./output/jre
           cp ./scripts/Run.bat ./output/Run.bat
           cd ./output
           zip -r UsbMonitorHandler-${TAG_NAME}.zip ./

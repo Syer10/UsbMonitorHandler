@@ -35,7 +35,7 @@ jobs:
         run: jlink --add-modules java.base --output jre --strip-debug --no-man-pages --no-header-files
 
       - name: Upload JDK package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: jre
           path: jre
@@ -58,7 +58,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Download JRE
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: jre
           path: jre

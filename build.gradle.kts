@@ -16,7 +16,7 @@ dependencies {
     implementation("com.github.ajalt.clikt:clikt:5.1.0")
     implementation("com.lordcodes.turtle:turtle:0.10.0")
 
-    implementation("net.codecrete.usb:java-does-usb:1.2.0")
+    implementation("net.codecrete.usb:java-does-usb:1.2.1")
 
     testImplementation(kotlin("test"))
 }

@@ -13,7 +13,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
-    implementation("com.github.ajalt.clikt:clikt:5.0.3")
+    implementation("com.github.ajalt.clikt:clikt:5.1.0")
     implementation("com.lordcodes.turtle:turtle:0.10.0")
 
     implementation("net.codecrete.usb:java-does-usb:1.2.0")

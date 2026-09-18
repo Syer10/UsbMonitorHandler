@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.3.10"
-    id("org.graalvm.buildtools.native") version "0.11.4"
+    id("org.graalvm.buildtools.native") version "1.1.14"
 }
 
 group = "ca.gosyer.usbhandler"
